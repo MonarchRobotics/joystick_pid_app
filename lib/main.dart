@@ -31,8 +31,12 @@ class _MainState extends State<Main> {
   double previousSpeed = 0.0;
   List<double> speedList = List();
 
+  TextEditingController KpText;
+  TextEditingController KiText;
+  TextEditingController KdText;
 
-  MotorControlPID pid = MotorControlPID(0.0,1.0,1.0,0.2,0.017,0);
+
+  MotorControlPID pid;
 
   Timer timer;
 
@@ -40,6 +44,12 @@ class _MainState extends State<Main> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    KpText = TextEditingController(text: "0.2");
+    KiText = TextEditingController(text: "0.03");
+    KdText = TextEditingController(text: "0.0");
+
+    pid = MotorControlPID(0.0,1.0,1.0,0.2,0.03,0.0);
+
     timer = Timer.periodic(Duration(milliseconds: 20), (Timer timer){
       setState(() {
         pid.setTarget(joystickReading);
@@ -75,6 +85,39 @@ class _MainState extends State<Main> {
             onChanged: (double newValue){
             },
           ),
+          Text("Kp:"),
+          TextField(
+            controller: KpText,
+            onChanged: (String text){
+              pid.setKp(double.parse(text));
+              pid.reset();
+              previousSpeed = 0;
+              joystickReading = 0;
+            },
+            keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+          ),
+          Text("Ki:"),
+          TextField(
+            controller: KiText,
+            onChanged: (String text){
+              pid.setKi(double.parse(text));
+              pid.reset();
+              previousSpeed = 0;
+              joystickReading = 0;
+            },
+            keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+          ),
+          Text("Kd:"),
+          TextField(
+            controller: KdText,
+            onChanged: (String text){
+              pid.setKd(double.parse(text));
+              pid.reset();
+              previousSpeed = 0;
+              joystickReading = 0;
+            },
+            keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+          ),
           RaisedButton(
             child: Text("Reset"),
             onPressed: (){
@@ -84,7 +127,7 @@ class _MainState extends State<Main> {
                 joystickReading = 0;
               });
             },
-          )
+          ),
         ],
       ),
     );
