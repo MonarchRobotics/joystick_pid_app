@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "build/web",
+    "site": "joystickpid-monarchrobotics",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
